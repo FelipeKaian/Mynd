@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Speech Recognition App</title>
+
+    <style>
+    </style>
+</head>
+<body>
+    <button id="btn">click</button>
+    <script>  
+            if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition, ouvir = new SpeechRecognition(),botao = document.getElementById("btn"),resposta = new SpeechSynthesisUtterance, fala = speechSynthesis;
+
+                resposta.volume = 1;
+                resposta.pitch = 1;
+
+                ouvir.start(); 
+                botao.addEventListener('click',function() {
+                        responder("pronto; pode falar!");
+                        ouvir.start();
+                    });
+
+                ouvir.nomatch = function(e) {
+                    responder("Deu algum erro aqui...")
+                }   
+                ouvir.soundend = function(e) {
+                    responder("Nao escuto mais nada")
+                }
+                        
+                ouvir.onresult = function(e) {
+                    var entendido = e.results[0][0].transcript;
+                    pensar(entendido);
+                }
+                     
+                function pensar(escutado) {
+                    if(escutado === 'Oi'){
+                        responder("olá tudo bem?, estou te ouvindo");
+                    }else{
+                        responder(escutado);
+                    }
+                }
+
+                function responder(text){
+                    resposta.text = text;
+                    fala.speak(resposta);
+                }
+
+            } else {
+                alert('Este navegador não suporta esta funcionalidade ainda!');
+            }
+    </script>
+</body>
+</html>
